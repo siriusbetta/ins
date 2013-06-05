@@ -1,0 +1,28 @@
+clear;
+t = 200;
+dT = 0.1;
+
+phi(1) = rad(40);
+tetha(1) = rad(50);
+psi(1) = rad(60);
+
+load('out.mat');
+i = 2;
+
+c11(1) = 0; c12(1) = 0; c13(1) = 0;
+c21(1) = 0; c22(1) = 0; c23(1) = 0;
+c31(1) = 0; c32(1) = 0; c33(1) = 0;
+
+for j = 1:dT:t-1
+    wx(i) = Wnbn(1,i);
+    wy(i) = Wnbn(2,i);
+    wz(i) = Wnbn(3,i);
+    w = [0, -wz(i), wy(i); wz(i), 0, -wx(i); -wy(i), wx(i), 0]
+    Cq = C(phi(i - 1), tetha(i - 1), psi(i- 1)) * w;% * [0, -wz(i), wy(i); wz(i), 0, -wx(i); -wy(i), wx(i), 0];
+    c11(i) = Cq(1,i) + c11(i - 1); c12(i) = Cq(2,i) + c12(i - 1); c13(i) = Cq(3,i) + c13(i - 1);
+    c21(i) = Cq(2,i) + c21(i - 1); c21(i) = Cq(2,i) + c21(i - 1); c21(i) = Cq(2,i) + c2(i - 1);
+    phi(i) = atan(Cq(3,2)/Cq(3,3));
+    tetha(i) = asin(-Cq(3,1));
+    psi(i) = atan(Cq(2,1)/Cq(1,1));
+    i = i + 1;
+end
